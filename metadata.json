@@ -1,0 +1,8 @@
+{
+  "name": "FARM-MIND",
+  "description": "Competitive autonomous agent and evaluation system for Kaggle Kaggriculture",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
