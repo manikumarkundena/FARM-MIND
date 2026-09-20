@@ -78,8 +78,8 @@ function Ground() {
       >
         <planeGeometry
           args={[
-            BOARD_SIZE * TILE_SIZE,
-            BOARD_SIZE * TILE_SIZE,
+            18,
+            14,
           ]}
         />
 
@@ -1120,6 +1120,239 @@ function Tree({
   );
 }
 
+
+/* ---------------------------------------------------------
+   Cinematic farm road
+--------------------------------------------------------- */
+
+function FarmRoad() {
+  return (
+    <group position={[0, 0.012, -5.7]}>
+      <mesh receiveShadow>
+        <boxGeometry args={[18, 0.08, 1.9]} />
+        <meshStandardMaterial
+          color="#5C665E"
+          roughness={0.92}
+        />
+      </mesh>
+
+      <mesh position={[0, 0.045, 0]}>
+        <boxGeometry args={[18, 0.012, 0.08]} />
+        <meshStandardMaterial color="#E8D89A" />
+      </mesh>
+
+      {Array.from({ length: 9 }, (_, index) => (
+        <mesh
+          key={index}
+          position={[-8.1 + index * 2, 0.052, 0]}
+        >
+          <boxGeometry args={[1.05, 0.018, 0.06]} />
+          <meshBasicMaterial color="#F6E7B2" />
+        </mesh>
+      ))}
+
+      <mesh
+        position={[0, 0.06, -0.86]}
+      >
+        <boxGeometry args={[18, 0.018, 0.05]} />
+        <meshBasicMaterial color="#D9C98B" />
+      </mesh>
+
+      <mesh
+        position={[0, 0.06, 0.86]}
+      >
+        <boxGeometry args={[18, 0.018, 0.05]} />
+        <meshBasicMaterial color="#D9C98B" />
+      </mesh>
+    </group>
+  );
+}
+
+/* ---------------------------------------------------------
+   Ambient farm tractor
+--------------------------------------------------------- */
+
+function Tractor() {
+  const group = useRef<THREE.Group>(null);
+  const wheelRefs = useRef<THREE.Mesh[]>([]);
+
+  useFrame((state) => {
+    if (!group.current) return;
+
+    const t = state.clock.elapsedTime;
+    const travel = 18;
+    const x = ((t * 1.15) % travel) - travel / 2;
+
+    group.current.position.x = x;
+    group.current.position.y =
+      0.08 + Math.sin(t * 2.2) * 0.008;
+
+    wheelRefs.current.forEach((wheel) => {
+      wheel.rotation.z -= 0.035;
+    });
+  });
+
+  const addWheel = (ref: THREE.Mesh | null) => {
+    if (ref && !wheelRefs.current.includes(ref)) {
+      wheelRefs.current.push(ref);
+    }
+  };
+
+  return (
+    <group
+      ref={group}
+      position={[-9, 0.08, -5.7]}
+      scale={0.9}
+      rotation={[0, Math.PI / 2, 0]}
+    >
+      {/* rear chassis */}
+      <mesh position={[-0.25, 0.38, 0]} castShadow>
+        <boxGeometry args={[0.95, 0.28, 0.72]} />
+        <meshStandardMaterial color="#B84932" roughness={0.72} />
+      </mesh>
+
+      {/* front hood */}
+      <mesh position={[0.55, 0.5, 0]} castShadow>
+        <boxGeometry args={[0.75, 0.3, 0.62]} />
+        <meshStandardMaterial color="#C95738" roughness={0.7} />
+      </mesh>
+
+      {/* cabin */}
+      <mesh position={[-0.28, 0.82, 0]} castShadow>
+        <boxGeometry args={[0.55, 0.62, 0.62]} />
+        <meshStandardMaterial
+          color="#385444"
+          transparent
+          opacity={0.92}
+          roughness={0.45}
+        />
+      </mesh>
+
+      {/* roof */}
+      <mesh position={[-0.28, 1.17, 0]} castShadow>
+        <boxGeometry args={[0.7, 0.09, 0.72]} />
+        <meshStandardMaterial color="#D6C78B" />
+      </mesh>
+
+      {/* front grille */}
+      <mesh position={[0.94, 0.5, 0]}>
+        <boxGeometry args={[0.06, 0.22, 0.42]} />
+        <meshStandardMaterial color="#28332D" />
+      </mesh>
+
+      {/* rear wheels */}
+      {[
+        [-0.45, 0.25, -0.43],
+        [-0.45, 0.25, 0.43],
+      ].map((position, index) => (
+        <mesh
+          key={index}
+          ref={addWheel}
+          position={position as [number, number, number]}
+          rotation={[Math.PI / 2, 0, 0]}
+          castShadow
+        >
+          <cylinderGeometry args={[0.3, 0.3, 0.16, 14]} />
+          <meshStandardMaterial color="#27302C" roughness={1} />
+        </mesh>
+      ))}
+
+      {/* front wheels */}
+      {[
+        [0.63, 0.24, -0.38],
+        [0.63, 0.24, 0.38],
+      ].map((position, index) => (
+        <mesh
+          key={index}
+          ref={addWheel}
+          position={position as [number, number, number]}
+          rotation={[Math.PI / 2, 0, 0]}
+          castShadow
+        >
+          <cylinderGeometry args={[0.22, 0.22, 0.14, 14]} />
+          <meshStandardMaterial color="#27302C" roughness={1} />
+        </mesh>
+      ))}
+
+      {/* tiny trailer */}
+      <group position={[-1.1, 0.35, 0]}>
+        <mesh castShadow>
+          <boxGeometry args={[1.05, 0.38, 0.95]} />
+          <meshStandardMaterial color="#7A563B" roughness={0.9} />
+        </mesh>
+        <mesh position={[0, 0.28, 0]}>
+          <boxGeometry args={[1.12, 0.08, 1.0]} />
+          <meshStandardMaterial color="#A77A4F" />
+        </mesh>
+        {[
+          [-0.28, -0.52],
+          [0.28, -0.52],
+        ].map(([x, z], index) => (
+          <mesh
+            key={index}
+            position={[x, -0.18, z]}
+            rotation={[Math.PI / 2, 0, 0]}
+          >
+            <cylinderGeometry args={[0.18, 0.18, 0.12, 12]} />
+            <meshStandardMaterial color="#27302C" />
+          </mesh>
+        ))}
+      </group>
+    </group>
+  );
+}
+
+/* ---------------------------------------------------------
+   Animated windmill landmark
+--------------------------------------------------------- */
+
+function Windmill() {
+  const blades = useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    if (!blades.current) return;
+    blades.current.rotation.z =
+      state.clock.elapsedTime * 0.55;
+  });
+
+  return (
+    <group position={[-2.7, 0, -4.35]}>
+      <mesh
+        position={[0, 1.05, 0]}
+        scale={[0.28, 1.15, 0.28]}
+        castShadow
+      >
+        <coneGeometry args={[0.85, 2.5, 5]} />
+        <meshStandardMaterial color="#7C6145" />
+      </mesh>
+
+      <mesh
+        position={[0, 2.05, 0]}
+        castShadow
+      >
+        <cylinderGeometry args={[0.18, 0.18, 0.22, 12]} />
+        <meshStandardMaterial color="#4A514A" />
+      </mesh>
+
+      <group
+        ref={blades}
+        position={[0, 2.05, 0.12]}
+      >
+        {[0, 1, 2, 3].map((index) => (
+          <mesh
+            key={index}
+            rotation={[0, 0, index * (Math.PI / 2)]}
+            position={[0, 0, 0]}
+          >
+            <boxGeometry args={[0.08, 0.95, 0.045]} />
+            <meshStandardMaterial color="#D7D0B5" />
+          </mesh>
+        ))}
+      </group>
+    </group>
+  );
+}
+
 /* ---------------------------------------------------------
    World
 --------------------------------------------------------- */
@@ -1184,6 +1417,10 @@ function World({
       />
 
       <Ground />
+
+      <FarmRoad />
+      <Tractor />
+      <Windmill />
 
       <FarmPlots
         plants={plants}
