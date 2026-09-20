@@ -86,11 +86,13 @@ a {
    ========================================================= */
 
 .fm-nav {
-  position: sticky;
+  position: absolute;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
 
-  height: 68px;
+  height: 72px;
 
   display: flex;
   align-items: center;
@@ -100,9 +102,9 @@ a {
 
   border-bottom: 1px solid var(--line);
 
-  background: rgba(255, 253, 245, 0.92);
-
-  backdrop-filter: blur(18px);
+  background: linear-gradient(180deg, rgba(3,22,16,.92) 0%, rgba(3,22,16,.72) 72%, rgba(3,22,16,.28) 100%);
+  border-bottom-color: rgba(255,255,255,.12);
+  backdrop-filter: blur(16px);
 }
 
 .fm-brand {
@@ -115,7 +117,7 @@ a {
   font-weight: 500;
   letter-spacing: 0.14em;
 
-  color: var(--forest);
+  color: rgba(255,255,255,.94);
 }
 
 .fm-brand-mark {
@@ -125,7 +127,7 @@ a {
   display: grid;
   place-items: center;
 
-  border: 1px solid var(--forest);
+  border: 1px solid rgba(255,255,255,.5);
 
   font-family: "DM Mono", monospace;
   font-size: 10px;
@@ -162,7 +164,7 @@ a {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 
-  color: var(--muted);
+  color: rgba(255,255,255,.78);
 
   transition:
     color 180ms ease;
@@ -244,6 +246,19 @@ a {
   background: #17362a;
 }
 
+.fm-hero-world::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 92px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(3,22,16,.72) 0%, rgba(3,22,16,.42) 70%, rgba(3,22,16,0) 100%);
+}
+
+
 .fm-hero-video {
   width: 100%;
   height: 100%;
@@ -294,8 +309,8 @@ a {
   position: absolute;
   z-index: 4;
   left: clamp(28px, 7vw, 105px);
-  top: 34%;
-  transform: translateY(-34%);
+  top: 31%;
+  transform: translateY(-31%);
   width: min(680px, 48vw);
   color: white;
 }
@@ -327,7 +342,7 @@ a {
 
 .fm-hero h1 {
   margin: 0;
-  font-size: clamp(70px, 8.6vw, 142px);
+  font-size: clamp(82px, 9.8vw, 164px);
   line-height: .82;
   letter-spacing: -.075em;
   font-weight: 800;
@@ -343,8 +358,8 @@ a {
 }
 
 .fm-hero-tagline {
-  margin: 28px 0 0;
-  font-size: clamp(28px, 3.2vw, 48px);
+  margin: 30px 0 0;
+  font-size: clamp(32px, 3.8vw, 56px);
   line-height: .98;
   letter-spacing: -.045em;
   font-weight: 700;
@@ -524,7 +539,7 @@ a {
 
 .fm-hero-stats strong {
   font-family: "DM Mono", monospace;
-  font-size: clamp(15px, 1.18vw, 18px);
+  font-size: clamp(16px, 1.3vw, 20px);
   color: white;
 }
 
@@ -2347,5 +2362,29 @@ a {
 
   .fm-hero-actions {
     margin-top: 26px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .fm-nav {
+    height: 64px;
+    padding: 0 20px;
+  }
+
+  .fm-nav-links {
+    display: none;
+  }
+
+  .fm-hero-copy {
+    top: 15%;
+  }
+
+  .fm-hero h1 {
+    font-size: clamp(64px, 19vw, 92px);
+  }
+
+  .fm-hero-tagline {
+    font-size: clamp(28px, 7.5vw, 38px);
   }
 }
