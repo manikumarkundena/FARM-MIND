@@ -3125,3 +3125,41 @@ a {
     padding: 50px 22px;
   }
 }
+
+.fm-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fm-nav-kaggle {
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--lime);
+  color: var(--forest);
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  transition: transform 160ms ease, background 160ms ease;
+}
+
+.fm-nav-kaggle:hover {
+  background: #d7fb8a;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 760px) {
+  .fm-nav-actions .fm-nav-action {
+    display: none;
+  }
+
+  .fm-nav-kaggle {
+    height: 32px;
+    padding: 0 11px;
+    font-size: 8px;
+  }
+}
