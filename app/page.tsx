@@ -43,96 +43,118 @@ export default function Home() {
 
 
       {/* =====================================================
-          HERO
+          CINEMATIC HERO
           ===================================================== */}
 
       <section className="fm-hero">
+        <div className="fm-hero-world">
+          <FarmScene replayStep={null} />
+        </div>
 
-        <div className="fm-hero-grid" />
+        <div className="fm-hero-atmosphere" />
 
         <motion.div
           className="fm-hero-copy"
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.85 }}
         >
           <div className="fm-eyebrow">
             AUTONOMOUS FARMING AGENT
           </div>
 
           <h1>
-            FARM
-            <span>MIND</span>
+            FARM<span>-MIND</span>
           </h1>
 
+          <p className="fm-hero-tagline">
+            Smarter farms.
+            <br />
+            <em>Brighter tomorrows.</em>
+          </p>
+
           <p className="fm-hero-description">
-            An autonomous agent that manages resources,
-            cultivates crops, navigates the environment,
-            and adapts its decisions to market conditions.
+            An inspectable autonomous agent that manages resources,
+            cultivates crops, navigates a simulated environment,
+            and adapts decisions to market conditions inside Kaggriculture.
           </p>
 
           <div className="fm-hero-actions">
-            <a
-              href="#simulation"
-              className="fm-primary-action"
-            >
+            <a href="#simulation" className="fm-primary-action">
               <Play size={13} fill="currentColor" />
               EXPLORE SIMULATION
             </a>
 
-            <a
-              href="#architecture"
-              className="fm-secondary-action"
-            >
+            <a href="#architecture" className="fm-secondary-action">
               VIEW ARCHITECTURE
               <ArrowDownRight size={13} />
             </a>
           </div>
         </motion.div>
 
-
-        {/* ===================================================
-            WORLD PREVIEW
-            =================================================== */}
-
         <motion.div
-          className="fm-world"
-          initial={{ opacity: 0, scale: 0.97 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{
-            duration: 1.1,
-            delay: 0.15,
-          }}
+          className="fm-agent-card"
+          initial={{ opacity: 0, x: 24 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
         >
-          <div className="fm-world-label">
-  <span>SIMULATION ENVIRONMENT</span>
-  <strong>KAGGRICULTURE</strong>
-</div>
+          <div className="fm-agent-card-top">
+            <span>◈ CURRENT AGENT</span>
+            <strong>FARM-MIND V1</strong>
+            <b>VALIDATED</b>
+          </div>
 
-<div className="fm-world-canvas">
-  <FarmScene replayStep={null} />
-</div>
-
-          <div className="fm-world-meta">
-
+          <div className="fm-agent-card-grid">
+            <div>
+              <span>ENVIRONMENT</span>
+              <strong>KAGGRICULTURE</strong>
+            </div>
             <div>
               <span>BOARD</span>
               <strong>10 × 10</strong>
             </div>
-
             <div>
               <span>HORIZON</span>
               <strong>720 TURNS</strong>
             </div>
-
             <div>
-              <span>AGENT</span>
-              <strong>FARM-MIND V1</strong>
+              <span>STRATEGY</span>
+              <strong>ECONOMIC</strong>
             </div>
-
           </div>
+
+          <a href="#evolution">
+            VIEW RECORDED EXPERIMENTS <ArrowUpRight size={13} />
+          </a>
         </motion.div>
 
+        <div className="fm-hero-stats">
+          <div>
+            <strong>10 × 10</strong>
+            <span>GRID WORLD</span>
+          </div>
+          <div>
+            <strong>720</strong>
+            <span>TURNS / EPISODE</span>
+          </div>
+          <div>
+            <strong>V1</strong>
+            <span>VALIDATED STRATEGY</span>
+          </div>
+          <div>
+            <strong>3</strong>
+            <span>RECORDED EXPERIMENTS</span>
+          </div>
+        </div>
+
+        <div className="fm-scroll-cue">
+          <span>↓</span>
+          SCROLL TO EXPLORE
+        </div>
+
+        <div className="fm-hero-signature">
+          <span>OBSERVE → EVALUATE → PLAN → ACT</span>
+        </div>
       </section>
 
 
