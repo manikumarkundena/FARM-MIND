@@ -262,23 +262,23 @@ a {
   pointer-events: none;
   background:
     linear-gradient(90deg,
-      rgba(5,25,18,.88) 0%,
-      rgba(7,30,21,.66) 28%,
-      rgba(7,30,21,.12) 62%,
-      rgba(7,30,21,.28) 100%),
+      rgba(5,25,18,.72) 0%,
+      rgba(7,30,21,.50) 28%,
+      rgba(7,30,21,.08) 62%,
+      rgba(7,30,21,.22) 100%),
     linear-gradient(180deg,
-      rgba(5,20,15,.42) 0%,
+      rgba(5,20,15,.28) 0%,
       transparent 32%,
-      rgba(5,20,15,.18) 62%,
-      rgba(5,20,15,.72) 100%);
+      rgba(5,20,15,.10) 62%,
+      rgba(5,20,15,.60) 100%);
 }
 
 .fm-hero-copy {
   position: absolute;
   z-index: 4;
   left: clamp(28px, 7vw, 105px);
-  top: 50%;
-  transform: translateY(-46%);
+  top: 43%;
+  transform: translateY(-42%);
   width: min(680px, 48vw);
   color: white;
 }
@@ -483,18 +483,22 @@ a {
   z-index: 4;
   left: clamp(28px, 7vw, 105px);
   right: clamp(28px, 7vw, 105px);
-  bottom: 62px;
+  bottom: 42px;
   display: grid;
   grid-template-columns: repeat(4, max-content);
-  gap: 34px;
+  gap: 28px;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(255,255,255,.14);
+  background: rgba(5,28,20,.16);
+  backdrop-filter: blur(8px);
 }
 
 .fm-hero-stats > div {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  padding-right: 34px;
-  border-right: 1px solid rgba(255,255,255,.2);
+  padding-right: 30px;
+  border-right: 1px solid rgba(255,255,255,.16);
 }
 
 .fm-hero-stats > div:last-child {
@@ -518,7 +522,7 @@ a {
   position: absolute;
   z-index: 4;
   right: 30px;
-  bottom: 58px;
+  bottom: 28px;
   display: flex;
   align-items: center;
   gap: 9px;
@@ -542,7 +546,7 @@ a {
   position: absolute;
   z-index: 4;
   right: 30px;
-  bottom: 18px;
+  bottom: 10px;
   font-family: "DM Mono", monospace;
   font-size: 7px;
   letter-spacing: .12em;
@@ -2096,7 +2100,7 @@ a {
   .fm-hero-copy {
     left: 24px;
     right: 24px;
-    top: 150px;
+    top: 128px;
     transform: none;
     width: auto;
   }
