@@ -33,11 +33,13 @@ export default function Home() {
         </nav>
 
         <a
-          href="#simulation"
+          href="https://github.com/manikumarkundena/FARM-MIND"
+          target="_blank"
+          rel="noreferrer"
           className="fm-nav-action"
         >
-          EXPLORE
-          <ArrowUpRight size={13} />
+          VIEW ON GITHUB
+          <GitBranch size={13} />
         </a>
       </header>
 
@@ -48,7 +50,7 @@ export default function Home() {
 
       <section className="fm-hero">
         <div className="fm-hero-world">
-          <FarmScene replayStep={null} />
+          <FarmScene replayStep={null} cinematic />
         </div>
 
         <div className="fm-hero-atmosphere" />
