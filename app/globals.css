@@ -2582,3 +2582,248 @@ a {
     display: none;
   }
 }
+
+
+/* =========================================================
+   FINAL RESPONSIVE POLISH
+   ========================================================= */
+
+.simulation-layout {
+  min-height: 0;
+  align-items: stretch;
+}
+
+.simulation-world {
+  height: clamp(560px, 68vh, 760px);
+  min-height: 560px;
+}
+
+.simulation-world-canvas,
+.simulation-world-canvas .farm-scene {
+  contain: layout paint;
+}
+
+.inspector-top {
+  padding: 28px 26px;
+}
+
+.inspector-top h2 {
+  font-size: clamp(21px, 1.45vw, 26px);
+}
+
+.inspector-kicker,
+.decision-action span,
+.inspector-section > span,
+.inspector-grid span,
+.decision-reason > span,
+.decision-metrics span,
+.inspector-footer span {
+  font-size: 8px;
+}
+
+.decision-action {
+  padding: 27px 26px;
+}
+
+.decision-action strong {
+  font-size: 21px;
+}
+
+.inspector-grid > div {
+  min-height: 84px;
+  padding: 16px 21px;
+}
+
+.inspector-grid strong {
+  font-size: 11px;
+}
+
+.decision-reason {
+  padding: 22px 26px;
+}
+
+.decision-reason p {
+  font-size: 13px;
+}
+
+.decision-metrics > div {
+  padding: 19px 21px;
+}
+
+.decision-metrics strong {
+  font-size: 13px;
+}
+
+.inspector-footer {
+  padding: 17px 21px;
+}
+
+.inspector-footer strong {
+  font-size: 10px;
+}
+
+.replay-controls {
+  padding: 25px 26px;
+  margin-top: 18px;
+}
+
+.replay-position strong {
+  font-size: 15px;
+}
+
+.replay-time {
+  font-size: 10px;
+}
+
+.replay-buttons button {
+  width: 38px;
+  height: 38px;
+}
+
+.replay-buttons .replay-play {
+  width: 46px;
+  height: 46px;
+}
+
+.replay-speed button {
+  min-width: 40px;
+  height: 30px;
+  font-size: 9px;
+}
+
+@media (max-width: 1150px) {
+  .simulation-world {
+    height: 620px;
+    min-height: 620px;
+  }
+
+  .decision-inspector {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 800px) {
+  .simulation-lab {
+    padding-top: 88px;
+  }
+
+  .simulation-heading {
+    margin-bottom: 28px;
+  }
+
+  .simulation-heading h2 {
+    font-size: clamp(44px, 8vw, 64px);
+  }
+
+  .simulation-run-meta span {
+    font-size: 9px;
+    padding: 9px 11px;
+  }
+
+  .simulation-world {
+    height: min(72vh, 600px);
+    min-height: 500px;
+  }
+
+  .inspector-top {
+    padding: 23px 20px;
+  }
+
+  .decision-action,
+  .decision-reason {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .inspector-grid > div,
+  .decision-metrics > div {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .replay-controls {
+    padding: 21px 18px;
+  }
+}
+
+@media (max-width: 520px) {
+  .simulation-lab {
+    padding: 72px 14px 52px;
+  }
+
+  .simulation-heading h2 {
+    font-size: clamp(38px, 11vw, 52px);
+  }
+
+  .simulation-heading p {
+    font-size: 13px;
+  }
+
+  .simulation-run-meta {
+    width: 100%;
+    gap: 6px;
+  }
+
+  .simulation-run-meta span {
+    flex: 1 1 auto;
+    text-align: center;
+    min-width: 0;
+  }
+
+  .simulation-world {
+    height: 480px;
+    min-height: 480px;
+  }
+
+  .world-overlay {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+  }
+
+  .world-overlay > div {
+    min-width: 0;
+    padding: 9px 8px;
+  }
+
+  .world-overlay span {
+    font-size: 6px;
+  }
+
+  .world-overlay strong {
+    font-size: 8px;
+  }
+
+  .inspector-top h2 {
+    font-size: 20px;
+  }
+
+  .decision-action strong {
+    font-size: 19px;
+  }
+
+  .replay-header {
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .replay-time {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+  }
+
+  .replay-bottom {
+    gap: 16px;
+  }
+
+  .replay-speed {
+    width: 100%;
+  }
+
+  .replay-speed button {
+    flex: 1;
+  }
+}
