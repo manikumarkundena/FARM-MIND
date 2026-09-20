@@ -15,6 +15,7 @@ import type {
 
 interface FarmSceneProps {
   replayStep: ReplayStep | null;
+  cinematic?: boolean;
 }
 
 const BOARD_SIZE = 10;
@@ -1157,12 +1158,93 @@ function Landscape() {
 }
 
 /* ---------------------------------------------------------
+   River + foreground landscape
+--------------------------------------------------------- */
+
+function River() {
+  const water = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    if (!water.current) return;
+    const t = state.clock.elapsedTime;
+    water.current.position.y = -0.01 + Math.sin(t * 0.7) * 0.004;
+  });
+
+  return (
+    <group position={[0, -0.005, 5.9]}>
+      <mesh ref={water} receiveShadow>
+        <boxGeometry args={[18, 0.08, 1.35]} />
+        <meshStandardMaterial
+          color="#4E9DA8"
+          roughness={0.25}
+          metalness={0.05}
+        />
+      </mesh>
+
+      <mesh position={[0, 0.035, -0.78]}>
+        <boxGeometry args={[18, 0.12, 0.16]} />
+        <meshStandardMaterial color="#8C8067" roughness={1} />
+      </mesh>
+
+      <mesh position={[0, 0.035, 0.78]}>
+        <boxGeometry args={[18, 0.12, 0.16]} />
+        <meshStandardMaterial color="#8C8067" roughness={1} />
+      </mesh>
+    </group>
+  );
+}
+
+function FlowerPatch({
+  position,
+}: {
+  position: [number, number, number];
+}) {
+  const group = useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    if (!group.current) return;
+    group.current.rotation.z =
+      Math.sin(state.clock.elapsedTime * 1.1 + position[0]) * 0.025;
+  });
+
+  return (
+    <group ref={group} position={position}>
+      {Array.from({ length: 5 }, (_, i) => {
+        const angle = (i / 5) * Math.PI * 2;
+        return (
+          <mesh
+            key={i}
+            position={[
+              Math.cos(angle) * 0.14,
+              0.08,
+              Math.sin(angle) * 0.14,
+            ]}
+            castShadow
+          >
+            <sphereGeometry args={[0.07, 8, 6]} />
+            <meshStandardMaterial color="#F2B84B" />
+          </mesh>
+        );
+      })}
+      <mesh position={[0, 0.08, 0]}>
+        <sphereGeometry args={[0.055, 8, 6]} />
+        <meshStandardMaterial color="#7B4B2E" />
+      </mesh>
+    </group>
+  );
+}
+
+/* ---------------------------------------------------------
    Cinematic farm road
 --------------------------------------------------------- */
 
-function FarmRoad() {
+function FarmRoad({
+  z = -5.7,
+}: {
+  z?: number;
+}) {
   return (
-    <group position={[0, 0.012, -5.7]}>
+    <group position={[0, 0.012, z]}>
       <mesh receiveShadow>
         <boxGeometry args={[18, 0.08, 1.9]} />
         <meshStandardMaterial
@@ -1207,7 +1289,11 @@ function FarmRoad() {
    Ambient farm tractor
 --------------------------------------------------------- */
 
-function Tractor() {
+function Tractor({
+  z = -5.7,
+}: {
+  z?: number;
+}) {
   const group = useRef<THREE.Group>(null);
   const wheelRefs = useRef<THREE.Mesh[]>([]);
 
@@ -1236,9 +1322,9 @@ function Tractor() {
   return (
     <group
       ref={group}
-      position={[-9, 0.08, -5.7]}
+      position={[-9, 0.08, z]}
       scale={0.9}
-      rotation={[0, Math.PI / 2, 0]}
+      rotation={[0, 0, 0]}
     >
       {/* rear chassis */}
       <mesh position={[-0.25, 0.38, 0]} castShadow>
@@ -1394,8 +1480,10 @@ function Windmill() {
 
 function World({
   replayStep,
+  cinematic = false,
 }: {
   replayStep: ReplayStep | null;
+  cinematic?: boolean;
 }) {
   const playerPosition =
     replayStep?.p0_pos ?? [4, 4];
@@ -1415,49 +1503,75 @@ function World({
 
   return (
     <>
-      <PerspectiveCamera
-  makeDefault
-  position={[
-    8.8,
-    8.2,
-    8.8,
-  ]}
-  fov={42}
-  near={0.1}
-  far={100}
-  onUpdate={(camera) => {
-    camera.lookAt(0, 0, 0);
-  }}
-/>
+      <color
+        attach="background"
+        args={[cinematic ? "#78A8B5" : "#BFDCD0"]}
+      />
 
-      <ambientLight intensity={1.8} />
+      {cinematic && (
+        <fog
+          attach="fog"
+          args={["#78A8B5", 15, 30]}
+        />
+      )}
+
+      <PerspectiveCamera
+        makeDefault
+        position={
+          cinematic
+            ? [10.8, 7.6, 11.8]
+            : [8.8, 8.2, 8.8]
+        }
+        fov={cinematic ? 48 : 42}
+        near={0.1}
+        far={100}
+        onUpdate={(camera) => {
+          camera.lookAt(
+            0,
+            cinematic ? 0.1 : 0,
+            cinematic ? -0.7 : 0,
+          );
+        }}
+      />
+
+      <ambientLight intensity={cinematic ? 2.1 : 1.8} />
 
       <directionalLight
-        position={[
-          5,
-          10,
-          4,
-        ]}
-        intensity={2.5}
+        position={[-7, 12, 8]}
+        intensity={cinematic ? 3.8 : 2.5}
         castShadow
       />
 
       <directionalLight
-        position={[
-          -5,
-          6,
-          -4,
-        ]}
-        intensity={0.8}
+        position={[7, 7, -6]}
+        intensity={cinematic ? 1.15 : 0.8}
       />
+
+      {cinematic && (
+        <pointLight
+          position={[6, 5, 5]}
+          intensity={1.2}
+          distance={18}
+        />
+      )}
 
       <Landscape />
 
       <Ground />
 
-      <FarmRoad />
-      <Tractor />
+      <FarmRoad z={cinematic ? 4.15 : -5.7} />
+      <Tractor z={cinematic ? 4.15 : -5.7} />
       <Windmill />
+
+      {cinematic && (
+        <>
+          <River />
+          <FlowerPatch position={[-6.4, 0, 5.1]} />
+          <FlowerPatch position={[-5.7, 0, 4.5]} />
+          <FlowerPatch position={[5.9, 0, 5.1]} />
+          <FlowerPatch position={[6.4, 0, 4.6]} />
+        </>
+      )}
 
       <FarmPlots
         plants={plants}
@@ -1531,6 +1645,7 @@ function World({
 --------------------------------------------------------- */
 export default function FarmScene({
   replayStep,
+  cinematic = false,
 }: FarmSceneProps) {
   return (
     <div className="farm-scene">
