@@ -33,15 +33,25 @@ export default function Home() {
           <a href="#evolution">Evolution</a>
         </nav>
 
-        <a
-          href="https://github.com/manikumarkundena/FARM-MIND"
-          target="_blank"
-          rel="noreferrer"
-          className="fm-nav-action"
-        >
-          VIEW ON GITHUB
-          <GitBranch size={13} />
-        </a>
+        <div className="fm-nav-actions">
+          <a
+            href="https://github.com/manikumarkundena/FARM-MIND"
+            target="_blank"
+            rel="noreferrer"
+            className="fm-nav-action"
+          >
+            VIEW ON GITHUB
+            <GitBranch size={13} />
+          </a>
+          <a
+            href="https://www.kaggle.com/competitions/kaggriculture"
+            target="_blank"
+            rel="noreferrer"
+            className="fm-nav-kaggle"
+          >
+            PLAY ON KAGGLE ↗
+          </a>
+        </div>
       </header>
 
 
