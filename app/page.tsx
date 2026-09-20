@@ -114,7 +114,7 @@ export default function Home() {
           <div className="fm-agent-card-top">
             <span>◈ CURRENT AGENT</span>
             <strong>FARM-MIND V1</strong>
-            <b>VALIDATED</b>
+            <b>SUBMITTED</b>
           </div>
 
           <div className="fm-agent-card-grid">
@@ -168,6 +168,31 @@ export default function Home() {
         <div className="fm-hero-signature">
           <span>OBSERVE → EVALUATE → PLAN → ACT</span>
         </div>
+      </section>
+
+
+      {/* =====================================================
+          BENCHMARK STRIP
+          ===================================================== */}
+
+      <section className="fm-benchmark-strip" aria-label="Recorded benchmark results">
+        <div className="fm-benchmark-item">
+          <strong>10 / 10</strong>
+          <span>WINS VS STARTER · V1</span>
+        </div>
+        <div className="fm-benchmark-item">
+          <strong>22,954</strong>
+          <span>MEAN FINAL CASH · V1</span>
+        </div>
+        <div className="fm-benchmark-item">
+          <strong>0</strong>
+          <span>INVALID ACTIONS · RECORDED RUNS</span>
+        </div>
+        <div className="fm-benchmark-item">
+          <strong>720</strong>
+          <span>TURNS / EPISODE</span>
+        </div>
+        <div className="fm-benchmark-note">RECORDED LOCAL EXPERIMENTS · 10 SEEDED EPISODES</div>
       </section>
 
 
@@ -340,43 +365,34 @@ export default function Home() {
           ===================================================== */}
 
       <footer className="fm-footer">
-
-        <div>
-          <span className="fm-footer-brand">
-            FARM-MIND
-          </span>
-
-          <p>
-            Autonomous farming agent for simulated
-            agricultural environments.
-          </p>
+        <div className="fm-footer-identity">
+          <div className="fm-footer-brand-row">
+            <span className="fm-footer-brand-mark"><Leaf size={15} /></span>
+            <span className="fm-footer-brand">FARM-MIND</span>
+          </div>
+          <p>Built by <strong>Manikumar Kundena</strong>.</p>
+          <small>Inspectable autonomous agents for simulated environments.</small>
         </div>
 
-
-        <div className="fm-footer-links">
-
-          <a href="#simulation">
-            Simulation
-          </a>
-
-          <a href="#architecture">
-            Architecture
-          </a>
-
-          <a href="#evolution">
-            Evolution
-          </a>
-
-          <a
-            href="https://github.com/manikumarkundena/FARM-MIND"
-            target="_blank"
-            rel="noreferrer"
-          >
-            GitHub ↗
-          </a>
-
+        <div className="fm-footer-nav">
+          <span>EXPLORE</span>
+          <a href="#simulation">Simulation</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#evolution">Evolution</a>
         </div>
 
+        <div className="fm-footer-nav">
+          <span>PROJECT</span>
+          <a href="https://github.com/manikumarkundena/FARM-MIND" target="_blank" rel="noreferrer">GitHub ↗</a>
+          <a href="https://www.kaggle.com/competitions/kaggriculture" target="_blank" rel="noreferrer">Kaggriculture ↗</a>
+          <a href="https://manikumarkundena.vercel.app" target="_blank" rel="noreferrer">Portfolio ↗</a>
+        </div>
+
+        <div className="fm-footer-connect">
+          <span>LET'S CONNECT</span>
+          <a href="https://manikumarkundena.vercel.app" target="_blank" rel="noreferrer">manikumarkundena.vercel.app ↗</a>
+          <p>Code · Simulate · Learn · Grow</p>
+        </div>
       </footer>
 
     </main>
