@@ -7,6 +7,11 @@ import {
   GitBranch,
   Play,
   Leaf,
+  BarChart3,
+  Route,
+  Store,
+  Boxes,
+  ArrowRight,
 } from "lucide-react";
 
 import FarmScene from "@/components/FarmScene";
@@ -207,74 +212,45 @@ export default function Home() {
 
 
       {/* =====================================================
-          CAPABILITY STRIP
+          SYSTEM CAPABILITIES
           ===================================================== */}
 
-      <section className="fm-capabilities">
-
-        <div className="fm-section-index">
-          01 / CAPABILITIES
-        </div>
-
+      <section className="fm-capabilities fm-capabilities-premium">
+        <div className="fm-section-index">01 / SYSTEM CAPABILITIES</div>
         <div className="fm-capability-list">
-
-          <div className="fm-capability">
-            <span>01</span>
-
-            <div>
-              <strong>STATE PARSING</strong>
-
-              <p>
-                Converts environment observations into
-                structured game state.
-              </p>
-            </div>
-          </div>
-
-
-          <div className="fm-capability">
-            <span>02</span>
-
-            <div>
-              <strong>ECONOMIC SCORING</strong>
-
-              <p>
-                Evaluates crop choices using cost,
-                yield, revenue and remaining time.
-              </p>
-            </div>
-          </div>
-
-
-          <div className="fm-capability">
-            <span>03</span>
-
-            <div>
-              <strong>PATH PLANNING</strong>
-
-              <p>
-                Uses grid-based navigation to reach
-                productive targets.
-              </p>
-            </div>
-          </div>
-
-
-          <div className="fm-capability">
-            <span>04</span>
-
-            <div>
-              <strong>MARKET DECISIONS</strong>
-
-              <p>
-                Tracks market prices and applies
-                explicit selling rules.
-              </p>
-            </div>
-          </div>
-
+          <CapabilityCard icon={<Leaf size={19} />} number="01" title="STATE PARSING" text="Transforms environment observations into structured GameState on every decision step." />
+          <CapabilityCard icon={<BarChart3 size={19} />} number="02" title="ECONOMIC SCORING" text="Ranks viable crops using seed cost, yield, revenue, maturity and remaining horizon." />
+          <CapabilityCard icon={<Route size={19} />} number="03" title="BFS PATH PLANNING" text="Calculates grid routes to targets while respecting the accessible farm world." />
+          <CapabilityCard icon={<Store size={19} />} number="04" title="MARKET RULES" text="Tracks observed prices and applies explicit, inspectable selling decisions." />
         </div>
+      </section>
 
+      {/* =====================================================
+          THREE PROJECT EXPERIENCES
+          ===================================================== */}
+
+      <section className="fm-experience-rail" aria-label="FARM-MIND project experiences">
+        <div className="fm-experience-card fm-experience-featured">
+          <div className="fm-experience-icon"><Play size={17} fill="currentColor" /></div>
+          <span>02 / SIMULATE</span>
+          <h3>Watch the agent operate.</h3>
+          <p>Replay a recorded 720-turn Kaggriculture episode and inspect the action, target, crop and market context behind each decision.</p>
+          <a href="#simulation">OPEN REPLAY <ArrowRight size={14} /></a>
+        </div>
+        <div className="fm-experience-card">
+          <div className="fm-experience-icon"><Boxes size={17} /></div>
+          <span>03 / UNDERSTAND</span>
+          <h3>Inspect the system.</h3>
+          <p>Follow the Observe → Evaluate → Plan → Act pipeline and see how state, economics and navigation become an environment action.</p>
+          <a href="#architecture">VIEW ARCHITECTURE <ArrowRight size={14} /></a>
+        </div>
+        <div className="fm-experience-card">
+          <div className="fm-experience-icon"><BarChart3 size={17} /></div>
+          <span>04 / EVOLVE</span>
+          <h3>Measure strategy changes.</h3>
+          <p>Compare recorded V0 and V1 experiments across seeded episodes instead of treating every strategy change as an improvement.</p>
+          <a href="#evolution">VIEW EXPERIMENTS <ArrowRight size={14} /></a>
+        </div>
       </section>
 
 
@@ -297,7 +273,7 @@ export default function Home() {
         <div className="fm-section-heading">
 
           <div className="fm-section-index">
-            03 / ARCHITECTURE
+            05 / ARCHITECTURE
           </div>
 
           <div>
@@ -360,7 +336,7 @@ export default function Home() {
 
       <section id="evolution" className="fm-section fm-evolution">
         <div className="fm-section-heading">
-          <div className="fm-section-index">04 / EVOLUTION</div>
+          <div className="fm-section-index">06 / EVOLUTION</div>
           <div>
             <h2>Strategy changes<br />are measured.</h2>
             <p>FARM-MIND maintains versioned strategies and evaluates them through seeded experiments rather than treating every change as an improvement.</p>
@@ -406,6 +382,34 @@ export default function Home() {
       </footer>
 
     </main>
+  );
+}
+
+
+/* =========================================================
+   CAPABILITY CARD
+   ========================================================= */
+
+function CapabilityCard({
+  icon,
+  number,
+  title,
+  text,
+}: {
+  icon: React.ReactNode;
+  number: string;
+  title: string;
+  text: string;
+}) {
+  return (
+    <div className="fm-capability fm-capability-card">
+      <div className="fm-capability-icon">{icon}</div>
+      <span className="fm-capability-number">{number}</span>
+      <div>
+        <strong>{title}</strong>
+        <p>{text}</p>
+      </div>
+    </div>
   );
 }
 
