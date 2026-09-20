@@ -1648,13 +1648,22 @@ export default function FarmScene({
   cinematic = false,
 }: FarmSceneProps) {
   return (
-    <div className="farm-scene">
+    <div className="farm-scene" style={{ position: "absolute", inset: 0 }}>
       <Canvas
         shadows
+        frameloop="always"
         dpr={[1, 2]}
-        style={{ width: "100%", height: "100%", display: "block" }}
+        camera={{ position: [8.8, 8.2, 8.8], fov: 42, near: 0.1, far: 100 }}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          display: "block",
+        }}
         gl={{
           antialias: true,
+          alpha: false,
           powerPreference: "high-performance",
         }}
       >
