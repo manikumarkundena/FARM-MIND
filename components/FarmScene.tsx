@@ -1122,6 +1122,41 @@ function Tree({
 
 
 /* ---------------------------------------------------------
+   Distant cinematic landscape
+--------------------------------------------------------- */
+
+function Landscape() {
+  return (
+    <group>
+      <mesh position={[0, 5, -8.5]} rotation={[0, 0, 0]}>
+        <planeGeometry args={[28, 12]} />
+        <meshBasicMaterial color="#A9C9BE" />
+      </mesh>
+
+      <group position={[0, 0, -8]}>
+        <mesh position={[-5, 3.2, 0]}>
+          <coneGeometry args={[3.8, 6.4, 5]} />
+          <meshStandardMaterial color="#486B58" roughness={1} />
+        </mesh>
+        <mesh position={[0, 3.8, 0.3]}>
+          <coneGeometry args={[4.5, 7.5, 5]} />
+          <meshStandardMaterial color="#365846" roughness={1} />
+        </mesh>
+        <mesh position={[5.2, 3.0, 0.2]}>
+          <coneGeometry args={[3.6, 6, 5]} />
+          <meshStandardMaterial color="#55775D" roughness={1} />
+        </mesh>
+      </group>
+
+      <mesh position={[4.5, 5.2, -7.6]}>
+        <sphereGeometry args={[1.1, 24, 16]} />
+        <meshBasicMaterial color="#F6D98C" transparent opacity={0.85} />
+      </mesh>
+    </group>
+  );
+}
+
+/* ---------------------------------------------------------
    Cinematic farm road
 --------------------------------------------------------- */
 
@@ -1415,6 +1450,8 @@ function World({
         ]}
         intensity={0.8}
       />
+
+      <Landscape />
 
       <Ground />
 
