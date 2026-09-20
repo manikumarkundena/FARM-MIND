@@ -313,10 +313,9 @@ a {
   position: absolute;
   z-index: 4;
   left: clamp(28px, 7vw, 105px);
-  top: 31%;
-  transform: translateY(-31%);
+  top: 24%;
+  transform: translateY(-24%);
   width: min(680px, 48vw);
-  padding-bottom: 130px;
   color: white;
 }
 
@@ -520,7 +519,7 @@ a {
   z-index: 4;
   left: clamp(28px, 7vw, 105px);
   right: clamp(28px, 7vw, 105px);
-  bottom: 28px;
+  bottom: 0;
   display: flex;
   align-items: center;
   gap: clamp(26px, 3.8vw, 58px);
@@ -559,7 +558,7 @@ a {
   position: absolute;
   z-index: 4;
   right: 30px;
-  bottom: 28px;
+  bottom: 92px;
   display: flex;
   align-items: center;
   gap: 9px;
@@ -583,7 +582,7 @@ a {
   position: absolute;
   z-index: 4;
   right: 30px;
-  bottom: 10px;
+  bottom: 68px;
   font-family: "DM Mono", monospace;
   font-size: 7px;
   letter-spacing: .12em;
@@ -1690,6 +1689,20 @@ a {
 }
 
 @media (max-width: 800px) {
+  .fm-hero-copy {
+    top: 19%;
+    transform: translateY(-19%);
+  }
+
+  .fm-hero-stats {
+    bottom: 0;
+  }
+
+  .fm-scroll-cue,
+  .fm-hero-signature {
+    display: none;
+  }
+
   .fm-nav {
     padding: 0 20px;
   }
