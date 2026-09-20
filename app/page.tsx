@@ -10,6 +10,7 @@ import {
 
 import FarmScene from "@/components/FarmScene";
 import SimulationLab from "@/components/SimulationLab";
+import EvolutionLab from "@/components/EvolutionLab";
 
 export default function Home() {
   return (
@@ -287,93 +288,15 @@ export default function Home() {
           EVOLUTION
           ===================================================== */}
 
-      <section
-        id="evolution"
-        className="fm-section fm-evolution"
-      >
-
+      <section id="evolution" className="fm-section fm-evolution">
         <div className="fm-section-heading">
-
-          <div className="fm-section-index">
-            04 / EVOLUTION
-          </div>
-
+          <div className="fm-section-index">04 / EVOLUTION</div>
           <div>
-            <h2>
-              Strategy changes
-              <br />
-              are measured.
-            </h2>
-
-            <p>
-              FARM-MIND maintains versioned strategies and
-              evaluates them through seeded experiments rather
-              than treating every change as an improvement.
-            </p>
+            <h2>Strategy changes<br />are measured.</h2>
+            <p>FARM-MIND maintains versioned strategies and evaluates them through seeded experiments rather than treating every change as an improvement.</p>
           </div>
-
         </div>
-
-
-        <div className="fm-version-grid">
-
-          <article className="fm-version-card">
-
-            <div className="fm-version-top">
-              <span>VERSION 0</span>
-              <span>BASELINE</span>
-            </div>
-
-            <h3>Fixed-crop heuristic</h3>
-
-            <ul>
-              <li>Fixed carrot strategy</li>
-              <li>4-tile production cluster</li>
-              <li>Deterministic task priority</li>
-            </ul>
-
-          </article>
-
-
-          <div className="fm-version-transition">
-            <ArrowUpRight size={20} />
-          </div>
-
-
-          <article className="fm-version-card fm-version-current">
-
-            <div className="fm-version-top">
-              <span>VERSION 1</span>
-              <span className="fm-current">
-                CURRENT
-              </span>
-            </div>
-
-            <h3>Economic strategy</h3>
-
-            <ul>
-              <li>Dynamic crop scoring</li>
-              <li>Expanded production cluster</li>
-              <li>Market-aware selling</li>
-            </ul>
-
-          </article>
-
-        </div>
-
-
-        <div className="fm-evidence-note">
-
-          <GitBranch size={15} />
-
-          <span>
-            Strategy versions are evaluated through the
-            project&apos;s experiment runner and recorded
-            benchmark data.
-          </span>
-
-        </div>
-
+        <EvolutionLab />
       </section>
 
 
