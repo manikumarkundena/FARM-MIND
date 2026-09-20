@@ -1652,6 +1652,7 @@ export default function FarmScene({
       <Canvas
         shadows
         dpr={[1, 2]}
+        style={{ width: "100%", height: "100%", display: "block" }}
         gl={{
           antialias: true,
           powerPreference: "high-performance",
