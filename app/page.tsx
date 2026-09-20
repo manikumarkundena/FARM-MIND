@@ -167,7 +167,7 @@ export default function Home() {
           </div>
           <div>
             <strong>V1</strong>
-            <span>VALIDATED STRATEGY</span>
+            <span>SUBMITTED STRATEGY</span>
           </div>
           <div>
             <strong>3</strong>
