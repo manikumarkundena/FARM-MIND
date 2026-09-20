@@ -75,7 +75,7 @@ export default function Home() {
             preload="auto"
             aria-hidden="true"
           >
-            <source src="/hero-farm.mp4?v=20260921" type="video/mp4" />
+            <source src="/hero-farm-vercel.mp4" type="video/mp4" />
           </video>
         </div>
 
