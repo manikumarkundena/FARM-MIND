@@ -29,7 +29,7 @@ export default function SimulationLab() {
       1000 / speed;
 
     const timer = window.setInterval(() => {
-      setStepIndex(stepIndex + 1);
+      setStepIndex(Math.min(totalSteps - 1, stepIndex + 1));
     }, intervalMs);
 
     return () => {
