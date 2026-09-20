@@ -17,7 +17,7 @@ export default function SimulationLab() {
     totalSteps,
   } = useReplay();
 
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(true);
   const [speed, setSpeed] = useState(1);
 
   useEffect(() => {
@@ -29,9 +29,7 @@ export default function SimulationLab() {
       1000 / speed;
 
     const timer = window.setInterval(() => {
-      setStepIndex(
-        stepIndex + 1,
-      );
+      setStepIndex(stepIndex + 1);
     }, intervalMs);
 
     return () => {
