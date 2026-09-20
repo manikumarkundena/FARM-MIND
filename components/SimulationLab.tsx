@@ -118,9 +118,9 @@ export default function SimulationLab() {
 
       <div className="simulation-layout">
         <div className="simulation-world">
-          <FarmScene
-            replayStep={currentStep}
-          />
+  <div className="simulation-world-canvas">
+    <FarmScene replayStep={currentStep} />
+  </div>
 
           {currentStep && (
             <div className="world-overlay">

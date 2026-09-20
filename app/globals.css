@@ -397,17 +397,36 @@ a {
 
   box-shadow: var(--shadow-medium);
 }
-
-.fm-world > div:first-of-type {
+.fm-world-canvas {
   position: absolute;
   inset: 0;
 
   width: 100%;
   height: 100%;
+
+  z-index: 1;
+}
+
+.farm-scene {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
   min-width: 0;
   min-height: 0;
+}
 
-  z-index: 0;
+.farm-scene canvas {
+  display: block;
+
+  position: absolute !important;
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  min-width: 0 !important;
+  min-height: 0 !important;
 }
 
 .fm-world::before {
@@ -455,17 +474,6 @@ a {
   color: var(--forest);
 }
 
-.fm-world canvas {
-  display: block;
-  position: absolute !important;
-  inset: 0 !important;
-
-  width: 100% !important;
-  height: 100% !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  z-index: 0 !important;
-}
 
 .fm-world-meta {
   position: absolute;
@@ -1733,4 +1741,20 @@ a {
   .replay-speed {
     flex-wrap: wrap;
   }
+}
+
+.simulation-world-canvas {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 1;
+}
+.simulation-world {
+  position: relative;
+  min-width: 0;
+  min-height: 600px;
+  overflow: hidden;
 }

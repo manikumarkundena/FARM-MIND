@@ -104,13 +104,13 @@ export default function Home() {
           }}
         >
           <div className="fm-world-label">
-            <span>SIMULATION ENVIRONMENT</span>
-            <strong>KAGGRICULTURE</strong>
-          </div>
+  <span>SIMULATION ENVIRONMENT</span>
+  <strong>KAGGRICULTURE</strong>
+</div>
 
-          {/* Decorative environment preview.
-              Real recorded state lives in SimulationLab below. */}
-          <FarmScene replayStep={null} />
+<div className="fm-world-canvas">
+  <FarmScene replayStep={null} />
+</div>
 
           <div className="fm-world-meta">
 

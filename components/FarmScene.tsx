@@ -1255,30 +1255,20 @@ function World({
 /* ---------------------------------------------------------
    Public component
 --------------------------------------------------------- */
-
 export default function FarmScene({
   replayStep,
 }: FarmSceneProps) {
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        minHeight: "520px",
-      }}
-    >
+    <div className="farm-scene">
       <Canvas
         shadows
         dpr={[1, 2]}
         gl={{
           antialias: true,
-          powerPreference:
-            "high-performance",
+          powerPreference: "high-performance",
         }}
       >
-        <World
-          replayStep={replayStep}
-        />
+        <World replayStep={replayStep} />
       </Canvas>
     </div>
   );
