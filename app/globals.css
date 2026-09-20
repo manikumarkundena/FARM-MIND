@@ -3163,3 +3163,220 @@ a {
     font-size: 8px;
   }
 }
+
+
+/* =========================================================
+   PROJECT SHOWCASE SYSTEM
+   ========================================================= */
+
+.fm-capabilities-premium {
+  padding-top: 72px;
+  padding-bottom: 54px;
+  background: rgba(255,253,245,.94);
+}
+
+.fm-capabilities-premium .fm-section-index {
+  margin-bottom: 22px;
+  color: var(--emerald);
+}
+
+.fm-capabilities-premium .fm-capability-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.fm-capability-card {
+  position: relative;
+  min-height: 210px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 22px;
+  border: 1px solid var(--line-strong);
+  background: rgba(255,255,255,.78);
+  box-shadow: 0 14px 40px rgba(18,55,42,.055);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.fm-capability-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(22,138,82,.45);
+  box-shadow: 0 22px 55px rgba(18,55,42,.11);
+}
+
+.fm-capability-icon,
+.fm-experience-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(22,138,82,.35);
+  border-radius: 50%;
+  color: var(--emerald);
+  background: rgba(199,243,107,.13);
+}
+
+.fm-capability-number {
+  position: absolute;
+  top: 22px;
+  right: 20px;
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  color: var(--muted-2);
+}
+
+.fm-capability-card strong {
+  display: block;
+  margin-bottom: 9px;
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: var(--forest);
+}
+
+.fm-capability-card p {
+  margin: 0;
+  max-width: 260px;
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.fm-experience-rail {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  padding: 20px clamp(18px, 5vw, 82px) 82px;
+  background: var(--bg);
+}
+
+.fm-experience-card {
+  position: relative;
+  min-height: 260px;
+  padding: 26px;
+  overflow: hidden;
+  border: 1px solid rgba(18,55,42,.18);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(199,243,107,.14), transparent 42%),
+    #fff;
+  box-shadow: var(--shadow-soft);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.fm-experience-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(22,138,82,.4);
+  box-shadow: var(--shadow-medium);
+}
+
+.fm-experience-card::after {
+  content: "";
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  right: -70px;
+  bottom: -75px;
+  border: 1px solid rgba(22,138,82,.14);
+  border-radius: 50%;
+}
+
+.fm-experience-featured {
+  background:
+    linear-gradient(145deg, rgba(18,55,42,.98), rgba(18,55,42,.91)),
+    var(--forest);
+  color: white;
+}
+
+.fm-experience-featured .fm-experience-icon {
+  color: var(--lime);
+  border-color: rgba(199,243,107,.4);
+  background: rgba(199,243,107,.08);
+}
+
+.fm-experience-card > span {
+  display: block;
+  margin-top: 26px;
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: .11em;
+  color: var(--emerald);
+}
+
+.fm-experience-featured > span {
+  color: var(--lime);
+}
+
+.fm-experience-card h3 {
+  margin: 10px 0 10px;
+  font-size: 23px;
+  letter-spacing: -.04em;
+  color: var(--forest);
+}
+
+.fm-experience-featured h3 {
+  color: white;
+}
+
+.fm-experience-card p {
+  max-width: 390px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.fm-experience-featured p {
+  color: rgba(255,255,255,.67);
+}
+
+.fm-experience-card a {
+  position: absolute;
+  left: 26px;
+  bottom: 25px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: .08em;
+  color: var(--forest);
+}
+
+.fm-experience-featured a {
+  color: var(--lime);
+}
+
+.fm-experience-card a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1000px) {
+  .fm-capabilities-premium .fm-capability-list,
+  .fm-experience-rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .fm-capabilities-premium {
+    padding: 56px 18px 35px;
+  }
+
+  .fm-capabilities-premium .fm-capability-list,
+  .fm-experience-rail {
+    grid-template-columns: 1fr;
+  }
+
+  .fm-capability-card {
+    min-height: 185px;
+  }
+
+  .fm-experience-rail {
+    padding: 12px 18px 60px;
+  }
+
+  .fm-experience-card {
+    min-height: 240px;
+  }
+}
