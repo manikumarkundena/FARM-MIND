@@ -6,6 +6,7 @@ import {
   ArrowUpRight,
   GitBranch,
   Play,
+  Leaf,
 } from "lucide-react";
 
 import FarmScene from "@/components/FarmScene";
@@ -22,7 +23,7 @@ export default function Home() {
 
       <header className="fm-nav">
         <a href="#" className="fm-brand">
-          <span className="fm-brand-mark">FM</span>
+          <span className="fm-brand-mark"><Leaf size={17} strokeWidth={2.2} /></span>
           <span>FARM-MIND</span>
         </a>
 
