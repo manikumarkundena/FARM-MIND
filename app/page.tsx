@@ -50,7 +50,17 @@ export default function Home() {
 
       <section className="fm-hero">
         <div className="fm-hero-world">
-          <FarmScene replayStep={null} cinematic />
+          <video
+            className="fm-hero-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-hidden="true"
+          >
+            <source src="/hero-farm.mp4" type="video/mp4" />
+          </video>
         </div>
 
         <div className="fm-hero-atmosphere" />
