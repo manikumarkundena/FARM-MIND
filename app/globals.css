@@ -1758,3 +1758,235 @@ a {
   min-height: 600px;
   overflow: hidden;
 }
+
+
+/* =========================================================
+   EVOLUTION LAB
+   ========================================================= */
+
+.fm-evolution-lab {
+  max-width: 1250px;
+}
+
+.fm-lineage {
+  display: grid;
+  grid-template-columns: 1fr 70px 1fr;
+  align-items: stretch;
+  margin-bottom: 70px;
+}
+
+.fm-lineage-node {
+  min-height: 170px;
+  padding: 26px;
+  border: 1px solid var(--line-strong);
+  background: white;
+  box-shadow: var(--shadow-soft);
+}
+
+.fm-lineage-node span,
+.fm-experiment-card-top span,
+.fm-metric-hero span,
+.fm-metric-row span {
+  font-family: "DM Mono", monospace;
+  font-size: 8px;
+  letter-spacing: .1em;
+  color: var(--muted-2);
+}
+
+.fm-lineage-node strong {
+  display: block;
+  margin: 34px 0 9px;
+  font-size: 25px;
+  letter-spacing: -.04em;
+  color: var(--forest);
+}
+
+.fm-lineage-node small {
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  color: var(--muted);
+}
+
+.fm-lineage-current {
+  border-color: var(--emerald);
+  box-shadow: 0 25px 70px rgba(22,138,82,.10);
+}
+
+.fm-lineage-current span {
+  color: var(--emerald);
+}
+
+.fm-lineage-arrow {
+  display: grid;
+  place-items: center;
+  color: var(--emerald);
+}
+
+.fm-experiment-intro {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 28px;
+}
+
+.fm-experiment-intro h3 {
+  margin: 8px 0 0;
+  font-size: 30px;
+  letter-spacing: -.04em;
+  color: var(--forest);
+}
+
+.fm-experiment-intro p {
+  max-width: 430px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.fm-experiment-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.fm-experiment-card {
+  padding: 22px;
+  border: 1px solid var(--line-strong);
+  background: white;
+  box-shadow: var(--shadow-soft);
+}
+
+.fm-experiment-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--line);
+}
+
+.fm-experiment-card-top span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fm-experiment-card-top span:first-child {
+  color: var(--emerald);
+}
+
+.fm-experiment-card h4 {
+  min-height: 44px;
+  margin: 22px 0;
+  font-size: 17px;
+  color: var(--forest);
+}
+
+.fm-metric-hero {
+  padding: 16px;
+  background: var(--forest);
+}
+
+.fm-metric-hero span {
+  color: rgba(255,255,255,.55);
+}
+
+.fm-metric-hero strong {
+  display: block;
+  margin-top: 8px;
+  font-family: "DM Mono", monospace;
+  font-size: 28px;
+  color: var(--lime);
+}
+
+.fm-metric-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--line);
+  border-top: none;
+}
+
+.fm-metric-row > div {
+  min-width: 0;
+  padding: 12px 10px;
+  border-right: 1px solid var(--line);
+}
+
+.fm-metric-row > div:last-child {
+  border-right: none;
+}
+
+.fm-metric-row strong {
+  display: block;
+  margin-top: 6px;
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  color: var(--forest);
+}
+
+.fm-experiment-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 15px;
+}
+
+.fm-experiment-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 7px;
+  background: var(--surface-soft);
+  font-family: "DM Mono", monospace;
+  font-size: 7px;
+  color: var(--muted);
+}
+
+.fm-experiment-note {
+  margin: 15px 0 0;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.fm-evolution-data-loading,
+.fm-evolution-data-error {
+  padding: 30px;
+  border: 1px solid var(--line);
+  background: white;
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .fm-experiment-grid {
+    grid-template-columns: 1fr;
+  }
+  .fm-experiment-intro {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 650px) {
+  .fm-lineage {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .fm-lineage-arrow {
+    transform: rotate(90deg);
+    height: 35px;
+  }
+  .fm-metric-row {
+    grid-template-columns: 1fr;
+  }
+  .fm-metric-row > div {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .fm-metric-row > div:last-child {
+    border-bottom: none;
+  }
+}
