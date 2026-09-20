@@ -227,6 +227,23 @@ a {
   position: absolute;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
+  background: #17362a;
+}
+
+.fm-hero-video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(1.08) contrast(1.03);
+}
+
+@media (max-width: 768px) {
+  .fm-hero-video {
+    object-position: 58% center;
+  }
 }
 
 .fm-hero-world .farm-scene {
