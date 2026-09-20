@@ -1,0 +1,1285 @@
+"use client";
+
+import { Canvas, useFrame } from "@react-three/fiber";
+import {
+  OrbitControls,
+  PerspectiveCamera,
+} from "@react-three/drei";
+import { useEffect, useRef } from "react";
+import * as THREE from "three";
+
+import type {
+  PlantSnapshot,
+  ReplayStep,
+} from "@/lib/replay";
+
+interface FarmSceneProps {
+  replayStep: ReplayStep | null;
+}
+
+const BOARD_SIZE = 10;
+const TILE_SIZE = 1;
+
+const COLORS = {
+  grass: "#7FA35F",
+  grassDark: "#65854D",
+  soil: "#8A6244",
+  soilDark: "#6F4D36",
+
+  wheat: "#D9B24C",
+  carrot: "#E4773E",
+  tomato: "#C95A45",
+  strawberry: "#C84D68",
+  melon: "#6FA94E",
+
+  plantLeaf: "#4C873F",
+  plantLeafLight: "#78B94F",
+
+  agent: "#C7F36B",
+  agentDark: "#78A83E",
+
+  opponent: "#D8754F",
+
+  water: "#75C9D6",
+  path: "#C8B995",
+
+  building: "#76533A",
+  roof: "#35513C",
+
+  stone: "#A6A28E",
+
+  grid: "#D9E3C5",
+
+  actionWater: "#75C9D6",
+  actionHarvest: "#F2B84B",
+  actionPlant: "#C7F36B",
+  actionMove: "#FFFFFF",
+  actionClear: "#D8754F",
+};
+
+function boardToWorld(x: number, y: number) {
+  return [
+    (x - 4.5) * TILE_SIZE,
+    0,
+    (y - 4.5) * TILE_SIZE,
+  ] as const;
+}
+
+/* ---------------------------------------------------------
+   Ground
+--------------------------------------------------------- */
+
+function Ground() {
+  return (
+    <group>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        receiveShadow
+      >
+        <planeGeometry
+          args={[
+            BOARD_SIZE * TILE_SIZE,
+            BOARD_SIZE * TILE_SIZE,
+          ]}
+        />
+
+        <meshStandardMaterial color={COLORS.grass} />
+      </mesh>
+
+      {Array.from(
+        { length: BOARD_SIZE + 1 },
+        (_, i) => {
+          const offset =
+            (i - BOARD_SIZE / 2) * TILE_SIZE;
+
+          return (
+            <group key={i}>
+              <mesh
+                position={[
+                  offset,
+                  0.006,
+                  0,
+                ]}
+              >
+                <boxGeometry
+                  args={[
+                    0.012,
+                    0.012,
+                    BOARD_SIZE,
+                  ]}
+                />
+
+                <meshBasicMaterial
+                  color={COLORS.grid}
+                  transparent
+                  opacity={0.45}
+                />
+              </mesh>
+
+              <mesh
+                position={[
+                  0,
+                  0.006,
+                  offset,
+                ]}
+              >
+                <boxGeometry
+                  args={[
+                    BOARD_SIZE,
+                    0.012,
+                    0.012,
+                  ]}
+                />
+
+                <meshBasicMaterial
+                  color={COLORS.grid}
+                  transparent
+                  opacity={0.45}
+                />
+              </mesh>
+            </group>
+          );
+        },
+      )}
+    </group>
+  );
+}
+
+/* ---------------------------------------------------------
+   Soil
+--------------------------------------------------------- */
+
+function SoilTile({
+  x,
+  y,
+}: {
+  x: number;
+  y: number;
+}) {
+  const [wx, , wz] = boardToWorld(x, y);
+
+  return (
+    <mesh
+      position={[
+        wx,
+        0.018,
+        wz,
+      ]}
+      receiveShadow
+    >
+      <boxGeometry
+        args={[
+          0.86,
+          0.035,
+          0.86,
+        ]}
+      />
+
+      <meshStandardMaterial
+        color={COLORS.soil}
+        roughness={1}
+      />
+    </mesh>
+  );
+}
+
+function FarmPlots({
+  plants,
+}: {
+  plants: PlantSnapshot[];
+}) {
+  const plantedTiles = new Set(
+    plants.map(
+      (plant) =>
+        `${plant.x}-${plant.y}`,
+    ),
+  );
+
+  const tiles: Array<[number, number]> = [];
+
+  for (let y = 0; y < BOARD_SIZE; y++) {
+    for (let x = 0; x < BOARD_SIZE; x++) {
+      if (
+        plantedTiles.has(
+          `${x}-${y}`,
+        )
+      ) {
+        tiles.push([x, y]);
+      }
+    }
+  }
+
+  /*
+   * Keep the FARM-MIND cultivation area
+   * visually readable even when the replay
+   * contains only a few plants.
+   */
+  const cluster = [
+    [4, 4],
+    [3, 4],
+    [4, 3],
+    [3, 3],
+    [2, 4],
+    [4, 2],
+    [2, 3],
+  ] as Array<[number, number]>;
+
+  for (const tile of cluster) {
+    if (
+      !tiles.some(
+        ([x, y]) =>
+          x === tile[0] &&
+          y === tile[1],
+      )
+    ) {
+      tiles.push(tile);
+    }
+  }
+
+  return (
+    <group>
+      {tiles.map(([x, y]) => (
+        <SoilTile
+          key={`${x}-${y}`}
+          x={x}
+          y={y}
+        />
+      ))}
+    </group>
+  );
+}
+
+/* ---------------------------------------------------------
+   Crops
+--------------------------------------------------------- */
+
+function cropColor(crop: string | null) {
+  switch (crop) {
+    case "WHEAT":
+      return COLORS.wheat;
+
+    case "CARROT":
+      return COLORS.carrot;
+
+    case "TOMATO":
+      return COLORS.tomato;
+
+    case "STRAWBERRY":
+      return COLORS.strawberry;
+
+    case "MELON":
+      return COLORS.melon;
+
+    default:
+      return COLORS.plantLeaf;
+  }
+}
+
+function Crop({
+  plant,
+}: {
+  plant: PlantSnapshot;
+}) {
+  const group =
+    useRef<THREE.Group>(null);
+
+  const [x, , z] = boardToWorld(
+    plant.x,
+    plant.y,
+  );
+
+  const color = cropColor(
+    plant.crop,
+  );
+
+  useFrame((state) => {
+    if (!group.current) return;
+
+    const t = state.clock.elapsedTime;
+
+    group.current.rotation.z =
+      Math.sin(
+        t * 1.4 + plant.x,
+      ) * 0.035;
+  });
+
+  const age =
+    typeof plant.age === "number"
+      ? plant.age
+      : 0;
+
+  const scale = plant.mature
+    ? 1.15
+    : Math.min(
+        1,
+        0.55 + age * 0.06,
+      );
+
+  return (
+    <group
+      ref={group}
+      position={[
+        x,
+        0.08,
+        z,
+      ]}
+      scale={scale}
+    >
+      <mesh
+        position={[
+          0,
+          0.22,
+          0,
+        ]}
+      >
+        <cylinderGeometry
+          args={[
+            0.035,
+            0.045,
+            0.42,
+            6,
+          ]}
+        />
+
+        <meshStandardMaterial
+          color={COLORS.plantLeaf}
+        />
+      </mesh>
+
+      <mesh
+        position={[
+          -0.09,
+          0.25,
+          0,
+        ]}
+        rotation={[
+          0,
+          0,
+          -0.45,
+        ]}
+      >
+        <sphereGeometry
+          args={[
+            0.11,
+            8,
+            6,
+          ]}
+        />
+
+        <meshStandardMaterial
+          color={
+            COLORS.plantLeafLight
+          }
+        />
+      </mesh>
+
+      <mesh
+        position={[
+          0.09,
+          0.3,
+          0,
+        ]}
+        rotation={[
+          0,
+          0,
+          0.45,
+        ]}
+      >
+        <sphereGeometry
+          args={[
+            0.11,
+            8,
+            6,
+          ]}
+        />
+
+        <meshStandardMaterial
+          color={COLORS.plantLeaf}
+        />
+      </mesh>
+
+      <mesh
+        position={[
+          0,
+          0.42,
+          0,
+        ]}
+      >
+        <sphereGeometry
+          args={[
+            plant.mature
+              ? 0.14
+              : 0.09,
+            10,
+            8,
+          ]}
+        />
+
+        <meshStandardMaterial
+          color={color}
+          roughness={0.75}
+        />
+      </mesh>
+
+      {plant.watered && (
+        <mesh
+          position={[
+            0,
+            0.015,
+            0,
+          ]}
+          rotation={[
+            -Math.PI / 2,
+            0,
+            0,
+          ]}
+        >
+          <ringGeometry
+            args={[
+              0.26,
+              0.29,
+              24,
+            ]}
+          />
+
+          <meshBasicMaterial
+            color={COLORS.water}
+            transparent
+            opacity={0.55}
+          />
+        </mesh>
+      )}
+    </group>
+  );
+}
+
+function Crops({
+  plants,
+}: {
+  plants: PlantSnapshot[];
+}) {
+  return (
+    <group>
+      {plants.map((plant) => (
+        <Crop
+          key={`${plant.x}-${plant.y}`}
+          plant={plant}
+        />
+      ))}
+    </group>
+  );
+}
+
+/* ---------------------------------------------------------
+   Action helpers
+--------------------------------------------------------- */
+
+function getActionColor(action: string) {
+  switch (action) {
+    case "WATER":
+      return COLORS.actionWater;
+
+    case "HARVEST":
+      return COLORS.actionHarvest;
+
+    case "PLANT":
+      return COLORS.actionPlant;
+
+    case "CLEAR":
+      return COLORS.actionClear;
+
+    case "NORTH":
+    case "SOUTH":
+    case "EAST":
+    case "WEST":
+      return COLORS.actionMove;
+
+    default:
+      return COLORS.agent;
+  }
+}
+
+function isMovementAction(action: string) {
+  return (
+    action === "NORTH" ||
+    action === "SOUTH" ||
+    action === "EAST" ||
+    action === "WEST"
+  );
+}
+
+/* ---------------------------------------------------------
+   FARM-MIND agent
+--------------------------------------------------------- */
+
+function Agent({
+  position,
+  action,
+}: {
+  position: [number, number];
+  action: string;
+}) {
+  const group =
+    useRef<THREE.Group>(null);
+
+  const targetWorld = new THREE.Vector3();
+
+  useEffect(() => {
+    const [x, , z] = boardToWorld(
+      position[0],
+      position[1],
+    );
+
+    targetWorld.set(
+      x,
+      0.28,
+      z,
+    );
+  }, [
+    position,
+    targetWorld,
+  ]);
+
+  const [x, , z] = boardToWorld(
+    position[0],
+    position[1],
+  );
+
+  const actionColor =
+    getActionColor(action);
+
+  useFrame((state) => {
+    if (!group.current) return;
+
+    const t = state.clock.elapsedTime;
+
+    /*
+     * Smooth vertical hover.
+     * Horizontal position remains tied
+     * to the actual replay position.
+     */
+    group.current.position.x = THREE.MathUtils.lerp(
+      group.current.position.x,
+      x,
+      0.16,
+    );
+
+    group.current.position.z = THREE.MathUtils.lerp(
+      group.current.position.z,
+      z,
+      0.16,
+    );
+
+    group.current.position.y =
+      0.28 +
+      Math.sin(t * 2.2) *
+        0.025;
+  });
+
+  return (
+    <group
+      ref={group}
+      position={[
+        x,
+        0.28,
+        z,
+      ]}
+    >
+      {/* action aura */}
+      <mesh
+        rotation={[
+          -Math.PI / 2,
+          0,
+          0,
+        ]}
+      >
+        <ringGeometry
+          args={[
+            0.34,
+            0.39,
+            40,
+          ]}
+        />
+
+        <meshBasicMaterial
+          color={actionColor}
+          transparent
+          opacity={0.5}
+        />
+      </mesh>
+
+      {/* agent core */}
+      <mesh>
+        <sphereGeometry
+          args={[
+            0.18,
+            18,
+            18,
+          ]}
+        />
+
+        <meshStandardMaterial
+          color={COLORS.agent}
+          emissive={COLORS.agentDark}
+          emissiveIntensity={1.5}
+        />
+      </mesh>
+
+      {/* vertical marker */}
+      <mesh
+        position={[
+          0,
+          0.32,
+          0,
+        ]}
+      >
+        <cylinderGeometry
+          args={[
+            0.018,
+            0.018,
+            0.5,
+            6,
+          ]}
+        />
+
+        <meshBasicMaterial
+          color={actionColor}
+          transparent
+          opacity={0.5}
+        />
+      </mesh>
+
+      {/* action-specific pulse */}
+      {action !== "PASS" && (
+        <ActionPulse
+          action={action}
+          color={actionColor}
+        />
+      )}
+    </group>
+  );
+}
+
+/* ---------------------------------------------------------
+   Action pulse
+--------------------------------------------------------- */
+
+function ActionPulse({
+  action,
+  color,
+}: {
+  action: string;
+  color: string;
+}) {
+  const ring =
+    useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    if (!ring.current) return;
+
+    const t =
+      state.clock.elapsedTime;
+
+    const pulse =
+      0.85 +
+      Math.sin(t * 4) *
+        0.15;
+
+    ring.current.scale.set(
+      pulse,
+      pulse,
+      pulse,
+    );
+
+    const material =
+      ring.current.material as THREE.MeshBasicMaterial;
+
+    material.opacity =
+      0.18 +
+      (Math.sin(t * 4) + 1) *
+        0.08;
+  });
+
+  if (
+    action === "PASS"
+  ) {
+    return null;
+  }
+
+  return (
+    <mesh
+      ref={ring}
+      position={[
+        0,
+        0.012,
+        0,
+      ]}
+      rotation={[
+        -Math.PI / 2,
+        0,
+        0,
+      ]}
+    >
+      <ringGeometry
+        args={[
+          0.42,
+          0.47,
+          40,
+        ]}
+      />
+
+      <meshBasicMaterial
+        color={color}
+        transparent
+        opacity={0.25}
+      />
+    </mesh>
+  );
+}
+
+/* ---------------------------------------------------------
+   Opponent
+--------------------------------------------------------- */
+
+function Opponent({
+  position,
+}: {
+  position: [number, number];
+}) {
+  const group =
+    useRef<THREE.Group>(null);
+
+  const [x, , z] = boardToWorld(
+    position[0],
+    position[1],
+  );
+
+  useFrame((state) => {
+    if (!group.current) return;
+
+    group.current.position.y =
+      0.18 +
+      Math.sin(
+        state.clock.elapsedTime * 1.7,
+      ) *
+        0.015;
+  });
+
+  return (
+    <group
+      ref={group}
+      position={[
+        x,
+        0.18,
+        z,
+      ]}
+    >
+      <mesh>
+        <sphereGeometry
+          args={[
+            0.12,
+            12,
+            12,
+          ]}
+        />
+
+        <meshStandardMaterial
+          color={COLORS.opponent}
+        />
+      </mesh>
+
+      <mesh
+        rotation={[
+          -Math.PI / 2,
+          0,
+          0,
+        ]}
+      >
+        <ringGeometry
+          args={[
+            0.19,
+            0.22,
+            24,
+          ]}
+        />
+
+        <meshBasicMaterial
+          color={COLORS.opponent}
+          transparent
+          opacity={0.45}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+/* ---------------------------------------------------------
+   Target tile
+--------------------------------------------------------- */
+function TargetTile({
+  target,
+  action,
+}: {
+  target: [number, number] | null;
+  action: string;
+}) {
+  const ring =
+    useRef<THREE.Mesh>(null);
+
+  const color =
+    getActionColor(action);
+
+  useFrame((state) => {
+    if (!ring.current || !target) {
+      return;
+    }
+
+    const t =
+      state.clock.elapsedTime;
+
+    const pulse =
+      1 +
+      Math.sin(t * 3.5) *
+        0.06;
+
+    ring.current.scale.set(
+      pulse,
+      pulse,
+      pulse,
+    );
+  });
+
+  if (!target) {
+    return null;
+  }
+
+  const [x, , z] = boardToWorld(
+    target[0],
+    target[1],
+  );
+
+  return (
+    <group
+      position={[
+        x,
+        0.035,
+        z,
+      ]}
+    >
+      {/* Target ring */}
+      <mesh
+        ref={ring}
+        rotation={[
+          -Math.PI / 2,
+          0,
+          0,
+        ]}
+      >
+        <ringGeometry
+          args={[
+            0.32,
+            0.39,
+            32,
+          ]}
+        />
+
+        <meshBasicMaterial
+          color={color}
+          transparent
+          opacity={0.9}
+        />
+      </mesh>
+
+      {/* Center marker */}
+      <mesh
+        rotation={[
+          -Math.PI / 2,
+          0,
+          0,
+        ]}
+      >
+        <circleGeometry
+          args={[
+            0.07,
+            16,
+          ]}
+        />
+
+        <meshBasicMaterial
+          color={color}
+          transparent
+          opacity={0.75}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+/* ---------------------------------------------------------
+   Movement direction
+--------------------------------------------------------- */
+
+function MovementIndicator({
+  position,
+  action,
+}: {
+  position: [number, number];
+  action: string;
+}) {
+  if (!isMovementAction(action)) {
+    return null;
+  }
+
+  const [x, , z] = boardToWorld(
+    position[0],
+    position[1],
+  );
+
+  let rotation = 0;
+
+  if (action === "NORTH") {
+    rotation = 0;
+  } else if (action === "EAST") {
+    rotation = -Math.PI / 2;
+  } else if (action === "SOUTH") {
+    rotation = Math.PI;
+  } else if (action === "WEST") {
+    rotation = Math.PI / 2;
+  }
+
+  return (
+    <group
+      position={[
+        x,
+        0.08,
+        z,
+      ]}
+      rotation={[
+        0,
+        rotation,
+        0,
+      ]}
+    >
+      <mesh
+        rotation={[
+          -Math.PI / 2,
+          0,
+          0,
+        ]}
+      >
+        <coneGeometry
+          args={[
+            0.13,
+            0.28,
+            3,
+          ]}
+        />
+
+        <meshBasicMaterial
+          color={COLORS.actionMove}
+          transparent
+          opacity={0.65}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+/* ---------------------------------------------------------
+   Barn
+--------------------------------------------------------- */
+
+function Barn() {
+  return (
+    <group
+      position={[
+        2.8,
+        0,
+        -3.1,
+      ]}
+    >
+      <mesh
+        position={[
+          0,
+          0.65,
+          0,
+        ]}
+        castShadow
+      >
+        <boxGeometry
+          args={[
+            1.7,
+            1.3,
+            1.4,
+          ]}
+        />
+
+        <meshStandardMaterial
+          color={COLORS.building}
+        />
+      </mesh>
+
+      <mesh
+        position={[
+          0,
+          1.48,
+          0,
+        ]}
+        castShadow
+      >
+        <coneGeometry
+          args={[
+            1.25,
+            0.65,
+            4,
+          ]}
+        />
+
+        <meshStandardMaterial
+          color={COLORS.roof}
+        />
+      </mesh>
+
+      <mesh
+        position={[
+          0,
+          0.48,
+          0.72,
+        ]}
+      >
+        <boxGeometry
+          args={[
+            0.48,
+            0.75,
+            0.04,
+          ]}
+        />
+
+        <meshStandardMaterial
+          color="#3C2D23"
+        />
+      </mesh>
+    </group>
+  );
+}
+
+/* ---------------------------------------------------------
+   Trees
+--------------------------------------------------------- */
+
+function Tree({
+  position,
+}: {
+  position: [number, number, number];
+}) {
+  return (
+    <group position={position}>
+      <mesh
+        position={[
+          0,
+          0.42,
+          0,
+        ]}
+        castShadow
+      >
+        <cylinderGeometry
+          args={[
+            0.08,
+            0.11,
+            0.8,
+            7,
+          ]}
+        />
+
+        <meshStandardMaterial
+          color={COLORS.building}
+        />
+      </mesh>
+
+      <mesh
+        position={[
+          0,
+          1.0,
+          0,
+        ]}
+        castShadow
+      >
+        <sphereGeometry
+          args={[
+            0.48,
+            8,
+            7,
+          ]}
+        />
+
+        <meshStandardMaterial
+          color={COLORS.grassDark}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+/* ---------------------------------------------------------
+   World
+--------------------------------------------------------- */
+
+function World({
+  replayStep,
+}: {
+  replayStep: ReplayStep | null;
+}) {
+  const playerPosition =
+    replayStep?.p0_pos ?? [4, 4];
+
+  const opponentPosition =
+    replayStep?.p1_pos ?? [4, 4];
+
+  const plants =
+    replayStep?.plants ?? [];
+
+  const target =
+    replayStep?.telemetry
+      ?.target_tile ?? null;
+
+  const action =
+    replayStep?.action ?? "PASS";
+
+  return (
+    <>
+      <PerspectiveCamera
+  makeDefault
+  position={[
+    8.8,
+    8.2,
+    8.8,
+  ]}
+  fov={42}
+  near={0.1}
+  far={100}
+  onUpdate={(camera) => {
+    camera.lookAt(0, 0, 0);
+  }}
+/>
+
+      <ambientLight intensity={1.8} />
+
+      <directionalLight
+        position={[
+          5,
+          10,
+          4,
+        ]}
+        intensity={2.5}
+        castShadow
+      />
+
+      <directionalLight
+        position={[
+          -5,
+          6,
+          -4,
+        ]}
+        intensity={0.8}
+      />
+
+      <Ground />
+
+      <FarmPlots
+        plants={plants}
+      />
+
+      <Crops
+        plants={plants}
+      />
+
+      <TargetTile
+        target={target}
+        action={action}
+      />
+
+      <Agent
+        position={playerPosition}
+        action={action}
+      />
+
+      <MovementIndicator
+        position={playerPosition}
+        action={action}
+      />
+
+      <Opponent
+        position={opponentPosition}
+      />
+
+      <Barn />
+
+      <Tree
+        position={[
+          -3.6,
+          0,
+          -3.4,
+        ]}
+      />
+
+      <Tree
+        position={[
+          -4.0,
+          0,
+          3.4,
+        ]}
+      />
+
+      <Tree
+        position={[
+          3.8,
+          0,
+          3.7,
+        ]}
+      />
+
+      <OrbitControls
+  target={[0, 0, 0]}
+  enablePan={false}
+  enableDamping
+  dampingFactor={0.08}
+  minDistance={7}
+  maxDistance={15}
+  maxPolarAngle={Math.PI / 2.15}
+  minPolarAngle={Math.PI / 5}
+/>
+    </>
+  );
+}
+
+/* ---------------------------------------------------------
+   Public component
+--------------------------------------------------------- */
+
+export default function FarmScene({
+  replayStep,
+}: FarmSceneProps) {
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        minHeight: "520px",
+      }}
+    >
+      <Canvas
+        shadows
+        dpr={[1, 2]}
+        gl={{
+          antialias: true,
+          powerPreference:
+            "high-performance",
+        }}
+      >
+        <World
+          replayStep={replayStep}
+        />
+      </Canvas>
+    </div>
+  );
+}
