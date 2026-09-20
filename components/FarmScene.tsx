@@ -1134,22 +1134,22 @@ function Landscape() {
         <meshBasicMaterial color="#A9C9BE" />
       </mesh>
 
-      <group position={[0, 0, -8]}>
-        <mesh position={[-5, 3.2, 0]}>
-          <coneGeometry args={[3.8, 6.4, 5]} />
-          <meshStandardMaterial color="#486B58" roughness={1} />
+      <group position={[0, 0, -12.5]}>
+        <mesh position={[-5, 2.5, 0]}>
+          <coneGeometry args={[4.2, 5.0, 6]} />
+          <meshStandardMaterial color="#52745F" roughness={1} />
         </mesh>
-        <mesh position={[0, 3.8, 0.3]}>
-          <coneGeometry args={[4.5, 7.5, 5]} />
-          <meshStandardMaterial color="#365846" roughness={1} />
+        <mesh position={[0, 3.0, 0.4]}>
+          <coneGeometry args={[4.8, 6.0, 6]} />
+          <meshStandardMaterial color="#3E6250" roughness={1} />
         </mesh>
-        <mesh position={[5.2, 3.0, 0.2]}>
-          <coneGeometry args={[3.6, 6, 5]} />
-          <meshStandardMaterial color="#55775D" roughness={1} />
+        <mesh position={[5.2, 2.35, 0.2]}>
+          <coneGeometry args={[3.9, 4.7, 6]} />
+          <meshStandardMaterial color="#5B7B63" roughness={1} />
         </mesh>
       </group>
 
-      <mesh position={[4.5, 5.2, -7.6]}>
+      <mesh position={[4.5, 4.4, -11.7]}>
         <sphereGeometry args={[1.1, 24, 16]} />
         <meshBasicMaterial color="#F6D98C" transparent opacity={0.85} />
       </mesh>
