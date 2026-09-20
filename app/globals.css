@@ -2827,3 +2827,91 @@ a {
     flex: 1;
   }
 }
+
+
+/* =========================================================
+   DESKTOP COMPOSITION LOCK
+   Keep the cinematic desktop composition consistent across
+   laptop and desktop browser heights. Mobile remains responsive.
+   ========================================================= */
+
+@media (min-width: 769px) {
+  .fm-hero {
+    min-height: 100svh;
+    height: 100svh;
+  }
+
+  .fm-hero-copy {
+    top: 31%;
+    transform: translateY(-31%);
+    width: min(680px, 48vw);
+  }
+
+  .fm-hero h1 {
+    font-size: clamp(82px, 9.8vw, 164px);
+  }
+
+  .fm-hero-tagline {
+    margin-top: 30px;
+    font-size: clamp(32px, 3.8vw, 56px);
+  }
+
+  .fm-hero-description {
+    margin-top: 24px;
+    font-size: clamp(15px, 1.08vw, 18px);
+    line-height: 1.65;
+  }
+
+  .fm-hero-actions {
+    margin-top: 28px;
+  }
+
+  .fm-agent-card {
+    top: 96px;
+    right: clamp(28px, 6vw, 90px);
+    width: min(390px, 27vw);
+    padding: 24px;
+    transform: none;
+  }
+
+  .fm-hero-stats {
+    bottom: 20px;
+  }
+}
+
+/* At laptop widths keep the same desktop visual language rather
+   than switching to the compact/tablet composition too early. */
+@media (min-width: 769px) and (max-width: 1150px) {
+  .fm-hero {
+    height: 100svh;
+  }
+
+  .fm-hero-copy {
+    left: 5vw;
+    width: min(650px, 60vw);
+  }
+
+  .fm-hero h1 {
+    font-size: clamp(72px, 8.5vw, 112px);
+  }
+
+  .fm-hero-tagline {
+    font-size: clamp(28px, 3.3vw, 42px);
+  }
+
+  .fm-hero-description {
+    max-width: 560px;
+    font-size: 14px;
+  }
+
+  .fm-agent-card {
+    top: 86px;
+    right: 4vw;
+    width: min(350px, 31vw);
+  }
+
+  .fm-hero-stats {
+    left: 5vw;
+    right: 5vw;
+  }
+}
