@@ -15,6 +15,8 @@ def farm_mind_v1_agent(observation: Dict[str, Any], configuration: Optional[Dict
     """Autonomous agent entry point for FARM-MIND V1 in Kaggriculture."""
     try:
         state = GameState.from_observation(observation)
+        if state.step == 0:
+            reset_v1_strategy()
         plan = _strategy_v1.decide(state)
         return plan.to_dict()
     except Exception as e:
