@@ -14,7 +14,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <style>{`
+          @media (min-width: 769px) {
+            .fm-hero-copy {
+              top: auto !important;
+              bottom: 112px !important;
+              transform: none !important;
+            }
+          }
+
+          @media (min-width: 769px) and (max-width: 1150px) {
+            .fm-hero-copy {
+              bottom: 112px !important;
+            }
+          }
+        `}</style>
+      </body>
     </html>
   );
 }
